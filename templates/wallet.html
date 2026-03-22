@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Wallet</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<h1>💰 Digital Wallet</h1>
+
+<h2>Balance: $<span id="balance">0</span></h2>
+
+<input id="amount" placeholder="Enter amount">
+
+<br><br>
+
+<button onclick="deposit()">Deposit</button>
+<button onclick="withdraw()">Withdraw</button>
+
+<p id="message"></p>
+
+<br><br>
+<a href="/">⬅ Back to AI Tutor</a>
+
+<script>
+
+async function loadBalance() {
+    const res = await fetch("/balance");
+    const data = await res.json();
+
+    document.getElementById("balance").innerText = data.balance;
+}
+
+async function deposit() {
+    const amount = document.getElementById("amount").value;
+
+    const res = await fetch("/deposit", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({amount})
+    });
+
+    const data = await res.json();
+    document.getElementById("message").innerText = data.message;
+
+    loadBalance();
+}
+
+async function withdraw() {
+    const amount = document.getElementById("amount").value;
+
+    const res = await fetch("/withdraw", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({amount})
+    });
+
+    const data = await res.json();
+    document.getElementById("message").innerText = data.message;
+
+    loadBalance();
+}
+
+loadBalance();
+
+</script>
+
+</body>
+</html>
